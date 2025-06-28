@@ -1,5 +1,5 @@
 //
-//  CustomImageView.swift
+//  RemoteImageView.swift
 //  LumiformTask
 //
 //  Created by Aleksandre Gelashvili on 28.06.25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct CustomImageView: View {
+struct RemoteImageView: View {
     let url: URL
     let size: CGSize?
     let showFullscreen: Bool

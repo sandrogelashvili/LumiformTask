@@ -29,3 +29,16 @@ enum TextStyle {
         }
     }
 }
+
+extension TextStyle {
+    static func `for`(item: ContentItem, level: Int) -> TextStyle {
+        switch item.type {
+        case .page:
+            return .pageTitle
+        case .section:
+            return .sectionTitle(level: level)
+        case .text, .image:
+            return .questionText
+        }
+    }
+}
