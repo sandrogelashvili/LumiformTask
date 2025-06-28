@@ -9,9 +9,11 @@ import SwiftUI
 
 @main
 struct LumiformTaskApp: App {
+    @ObservedObject var viewModel = MainPageViewModel()
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MainPageView(viewModel: viewModel)
         }
     }
 }
