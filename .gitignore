@@ -1,0 +1,42 @@
+# Xcode
+.DS_Store
+build/
+DerivedData/
+*.xcworkspace
+!default.xcworkspace
+xcuserdata/
+*.xccheckout
+*.moved-aside
+*.xcuserstate
+
+# SwiftPM
+/.swiftpm
+.build/
+
+# Archives
+*.xcarchive
+
+# Swift Package Artifacts
+.swiftpm/xcode/package.xcworkspace/
+
+# Generated Project Files
+*.xcodeproj/project.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+*.xcodeproj/project.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings
+
+# Output folders
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Other
+*.orig
+*.log
+
+# User-specific settings
+*.env
+*.local
+
+# Temporary
+*.tmp
+*.swp
