@@ -15,14 +15,25 @@ struct MainPageView: View {
             Color(.defaultWhite)
                 .ignoresSafeArea()
             
-            VStack {
-                Image(systemName: "globe")
-                    .imageScale(.large)
-                    .foregroundStyle(.tint)
-                
-                CustomTextView(text: "Hello, world!", style: .sectionTitle(level: 2), color: .defaultBlack)
+            NavigationView {
+                Group {
+                    if let root = viewModel.rootContent {
+                        ScrollView {
+                            ContentListView(item: root, sectionLevel: 1)
+                                .padding()
+                        }
+                    } else if let error = viewModel.errorMessage {
+                        Text("Error: \(error)")
+                            .foregroundColor(.red)
+                    } else {
+                        ProgressView("Loading...")
+                    }
+                }
+                .navigationTitle(viewModel.rootContent?.title ?? "Loading...")
             }
-            .padding()
+            .task {
+                await viewModel.fetchContent()
+            }
         }
     }
 }
