@@ -9,11 +9,10 @@ import SwiftUI
 
 @main
 struct LumiformTaskApp: App {
-    @ObservedObject var viewModel = MainPageViewModel()
     
     var body: some Scene {
         WindowGroup {
-            MainPageView(viewModel: viewModel)
+            CustomNavigationView(appRouter: .init())
         }
     }
 }

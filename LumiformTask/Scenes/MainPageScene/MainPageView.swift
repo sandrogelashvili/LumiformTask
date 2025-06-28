@@ -11,29 +11,28 @@ struct MainPageView: View {
     @StateObject var viewModel: MainPageViewModel
     
     var body: some View {
-        ZStack {
-            Color(.defaultWhite)
-                .ignoresSafeArea()
-            
-            NavigationView {
-                Group {
-                    if let root = viewModel.rootContent {
-                        ScrollView {
-                            ContentListView(item: root, sectionLevel: 1)
-                                .padding()
+        VStack {
+            Group {
+                if let root = viewModel.mainPage {
+                    ScrollView {
+                        ContentListView(item: root, sectionLevel: 1)
+                            .padding()
+                        
+                        Button("Go to nexxt page") {
+                            viewModel.navigateToSecondPage()
                         }
-                    } else if let error = viewModel.errorMessage {
-                        Text("Error: \(error)")
-                            .foregroundColor(.red)
-                    } else {
-                        ProgressView("Loading...")
                     }
+                } else if let error = viewModel.errorMessage {
+                    Text("Error: \(error)")
+                        .foregroundColor(.red)
+                } else {
+                    ProgressView("Loading...")
                 }
-                .navigationTitle(viewModel.rootContent?.title ?? "Loading...")
             }
             .task {
                 await viewModel.fetchContent()
             }
         }
+        .navigationTitle(viewModel.mainPage?.title ?? "N/A")
     }
 }
