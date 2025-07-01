@@ -12,7 +12,7 @@ struct ContentItem: Decodable {
     let title: String
     var items: [ContentItem]?
     let src: String?
-
+    
     enum ItemType: String, Decodable {
         case page
         case section

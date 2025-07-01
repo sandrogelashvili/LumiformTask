@@ -8,41 +8,44 @@
 import SwiftUI
 
 struct PrimaryButton: View {
-    
+
     struct Attribute {
-        let image: ImageResource
+        let image: LocalImageSource?
+        let imageSize: CGSize?
         let title: String
         let action: () -> Void
-        
+
         init(
-            image: ImageResource,
+            image: LocalImageSource? = nil,
+            imageSize: CGSize? = CGSize(width: 14, height: 14),
             title: String,
             action: @escaping () -> Void
         ) {
             self.image = image
+            self.imageSize = imageSize
             self.title = title
             self.action = action
         }
     }
-    
+
     let attribute: Attribute
-    
+
     var body: some View {
-        Button {
-            attribute.action()
-        } label: {
-            HStack (spacing: 8){
+        Button(action: attribute.action) {
+            HStack(spacing: 8) {
                 CustomTextView(
                     text: attribute.title,
                     style: .questionText,
                     color: .white
                 )
-                
-                Image(systemName: "chevron.right")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 14, height: 14)
-                    .foregroundColor(.white)
+
+                if let image = attribute.image, let size = attribute.imageSize {
+                    LocalImageView(
+                        source: image,
+                        size: size,
+                        color: .white
+                    )
+                }
             }
             .padding(.horizontal, 28)
             .padding(.vertical, 12.5)

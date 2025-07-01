@@ -51,7 +51,7 @@ struct FullscreenImageView: View {
                         dismiss()
                     }) {
                         LocalImageView(
-                            image: .closeXmark,
+                            source: .asset(.closeXmark),
                             size: CGSize(width: 20, height: 20),
                             color: .defaultBlack
                         )

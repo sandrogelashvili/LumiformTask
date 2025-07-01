@@ -9,7 +9,12 @@ import Foundation
 
 final class MainPageViewModel: ObservableObject {
     @Published var mainPageContent: ContentItem?
-    @Published var errorMessage: String?
+    @Published var errorMessage: String? {
+        didSet { isShowingError = errorMessage != nil }
+    }
+    @Published var isShowingError: Bool = false
+    @Published var isLoading: Bool = false
+    @Published var initialLoadCompleted: Bool = false
     
     private let networkService: NetworkServiceProtocol
     private let router: MainPageRouter
@@ -20,14 +25,25 @@ final class MainPageViewModel: ObservableObject {
         self.router = router
     }
     
-    func fetchContent() async {
-        do {
-            let root = try await networkService.fetch(ContentItem.self, from: contentURL)
+    func fetchContent() {
+        Task {
             await MainActor.run {
-                self.mainPageContent = filterOutNestedPages(from: root)
+                self.isLoading = true
             }
-        } catch {
-            self.errorMessage = error.localizedDescription
+            do {
+                let root = try await networkService.fetch(ContentItem.self, from: contentURL)
+                await MainActor.run {
+                    self.mainPageContent = filterOutNestedPages(from: root)
+                    self.isLoading = false
+                    self.initialLoadCompleted = true
+                }
+            } catch {
+                await MainActor.run {
+                    self.errorMessage = error.localizedDescription
+                    self.isLoading = false
+                    self.initialLoadCompleted = true
+                }
+            }
         }
     }
     

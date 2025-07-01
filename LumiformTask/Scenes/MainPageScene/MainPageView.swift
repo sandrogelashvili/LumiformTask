@@ -16,40 +16,46 @@ struct MainPageView: View {
                 .ignoresSafeArea()
             
             VStack {
-                Group {
-                    if let page = viewModel.mainPageContent {
-                        ScrollView {
-                            ContentListView(item: page, sectionLevel: 2)
-                                .padding()
-                            
-                            navigationButton
-                        }
-                        .scrollIndicators(.hidden)
+                if viewModel.isLoading {
+                    ProgressView("Loading...")
+                    
+                } else if let page = viewModel.mainPageContent {
+                    ScrollView {
+                        ContentListView(item: page, sectionLevel: 2)
+                            .padding()
                         
-                    } else if let error = viewModel.errorMessage {
-                        Text("Error: \(error)")
-                            .foregroundColor(.red)
-                        
-                    } else {
-                        ProgressView("Loading...")
+                        navigationButton
                     }
-                }
-                .task {
-                    await viewModel.fetchContent()
+                    .scrollIndicators(.hidden)
+                    
+                } else if viewModel.initialLoadCompleted {
+                    failedLoadingView
                 }
             }
             .navigationTitle(viewModel.mainPageContent?.title ?? "")
+            .errorAlert(isPresented: $viewModel.isShowingError, message: viewModel.errorMessage)
+            .task {
+                viewModel.fetchContent()
+            }
         }
     }
     
     private var navigationButton: some View {
         let attribute = PrimaryButton.Attribute(
-            image: .arrowLeft,
+            image: .system("chevron.right"),
             title: "Go to second page",
             action: {
                 viewModel.navigateToSecondPage()
             }
         )
         return PrimaryButton(attribute: attribute)
+    }
+    
+    private var failedLoadingView: some View {
+        let attribute = FailedLoadingView.Attribute(
+            action: {
+                viewModel.fetchContent()
+            })
+        return FailedLoadingView(attribute: attribute)
     }
 }

@@ -8,15 +8,29 @@
 import SwiftUI
 
 struct LocalImageView: View {
-    let image: ImageResource
+    let source: LocalImageSource
     let size: CGSize
     let color: Color
     
     var body: some View {
-        Image(image)
+        imageView
             .resizable()
             .scaledToFit()
             .frame(width: size.width, height: size.height)
             .foregroundStyle(color)
     }
+    
+    private var imageView: Image {
+        switch source {
+        case .asset(let imageResource):
+            return Image(imageResource)
+        case .system(let name):
+            return Image(systemName: name)
+        }
+    }
+}
+
+enum LocalImageSource {
+    case asset(ImageResource)
+    case system(String)
 }

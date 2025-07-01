@@ -11,24 +11,36 @@ struct SecondPageView: View {
     @StateObject var viewModel: SecondPageViewModel
     
     var body: some View {
-        VStack {
-            Group {
-                if let page = viewModel.secondPageContent {
+        ZStack {
+            Color(.defaultWhite)
+                .ignoresSafeArea()
+            
+            VStack {
+                if viewModel.isLoading {
+                    ProgressView("Loading...")
+                    
+                } else if let page = viewModel.secondPageContent {
                     ContentListView(item: page, sectionLevel: 1)
                         .padding()
                     
-                } else if let error = viewModel.errorMessage {
-                    Text("Error: \(error)")
-                        .foregroundColor(.red)
-                    
                 } else {
-                    ProgressView("Loading...")
+                    failedLoadingView
                 }
             }
+            .navigationTitle(viewModel.secondPageContent?.title ?? "")
+            .errorAlert(isPresented: $viewModel.isShowingError, message: viewModel.errorMessage)
+            .task {
+                viewModel.fetchSecondPage()
+            }
         }
-        .task {
-            await viewModel.fetchSecondPage()
-        }
-        .navigationTitle(viewModel.secondPageContent?.title ?? "")
+        
+    }
+    
+    private var failedLoadingView: some View {
+        let attribute = FailedLoadingView.Attribute(
+            action: {
+                viewModel.fetchSecondPage()
+            })
+        return FailedLoadingView(attribute: attribute)
     }
 }
