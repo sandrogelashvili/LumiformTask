@@ -11,7 +11,7 @@ struct LocalImageView: View {
     let image: ImageResource
     let size: CGSize
     let color: Color
-
+    
     var body: some View {
         Image(image)
             .resizable()

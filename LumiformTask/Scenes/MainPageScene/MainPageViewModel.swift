@@ -8,7 +8,7 @@
 import Foundation
 
 final class MainPageViewModel: ObservableObject {
-    @Published var mainPage: ContentItem?
+    @Published var mainPageContent: ContentItem?
     @Published var errorMessage: String?
     
     private let networkService: NetworkServiceProtocol
@@ -22,20 +22,25 @@ final class MainPageViewModel: ObservableObject {
     
     func fetchContent() async {
         do {
+            // Simulate artificial network delay (e.g. 3 seconds)
+            try await Task.sleep(nanoseconds: 3_000_000_000) // 3 seconds
+            
             let root = try await networkService.fetch(ContentItem.self, from: contentURL)
+            
             await MainActor.run {
-                self.mainPage = filterOutSecondPage(from: root)
+                self.mainPageContent = filterOutNestedPages(from: root)
             }
         } catch {
-            self.errorMessage = error.localizedDescription
+            await MainActor.run {
+                self.errorMessage = error.localizedDescription
+            }
         }
     }
     
-    /// Removes second page from main page's items
-    private func filterOutSecondPage(from root: ContentItem) -> ContentItem {
+    private func filterOutNestedPages(from root: ContentItem) -> ContentItem {
         guard root.type == .page else { return root }
         var newRoot = root
-        newRoot.items = root.items?.filter { $0.title != "Second Page" }
+        newRoot.items = root.items?.filter { $0.type != .page }
         return newRoot
     }
     

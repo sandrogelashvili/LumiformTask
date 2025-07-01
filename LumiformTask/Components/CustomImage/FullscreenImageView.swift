@@ -9,30 +9,76 @@
 import SwiftUI
 
 struct FullscreenImageView: View {
-    let url: URL
-
-    @StateObject private var loader: RemoteImageLoader
-
-    init(url: URL) {
-        self.url = url
-        _loader = StateObject(wrappedValue: RemoteImageLoader(url: url))
+    
+    struct Attribute {
+        let url: URL
+        let text: String
+        
+        init(
+            url: URL,
+            text: String
+        ) {
+            self.url = url
+            self.text = text
+        }
     }
-
+    
+    let attributes: Attribute
+    @Environment(\.dismiss) private var dismiss
+    @StateObject private var loader: RemoteImageLoader
+    
+    init(attributes: Attribute) {
+        self.attributes = attributes
+        _loader = StateObject(wrappedValue: RemoteImageLoader(url: attributes.url))
+    }
+    
     var body: some View {
-        ZStack {
-            Color.black.ignoresSafeArea()
-
-            switch loader.state {
-            case .loading:
-                ProgressView()
-            case .failure:
-                Image(systemName: "xmark.octagon")
-                    .foregroundColor(.red)
-            case .success(let image):
-                image
-                    .resizable()
-                    .scaledToFit()
-                    .padding()
+        ZStack(alignment: .top) {
+            Color(.defaultWhite)
+                .ignoresSafeArea()
+            
+            VStack {
+                HStack {
+                    CustomTextView(
+                        text: attributes.text,
+                        style: .sectionTitle(level: 2),
+                        color: .defaultBlack
+                    )
+                    
+                    Spacer()
+                    
+                    Button(action: {
+                        dismiss()
+                    }) {
+                        Image(systemName: "xmark")
+                            .foregroundColor(.primary)
+                            .padding(8)
+                            .background(Color.gray.opacity(0.2))
+                            .clipShape(Circle())
+                    }
+                }
+                .padding()
+                
+                Spacer()
+                
+                switch loader.state {
+                case .loading:
+                    ProgressView()
+                        .scaleEffect(1.5)
+                case .failure:
+                    Image(systemName: "xmark.octagon")
+                        .resizable()
+                        .scaledToFit()
+                        .foregroundColor(.red)
+                        .frame(width: 80, height: 80)
+                case .success(let image):
+                    image
+                        .resizable()
+                        .scaledToFit()
+                        .padding()
+                }
+                
+                Spacer()
             }
         }
     }

@@ -10,18 +10,18 @@ import Combine
 
 final class RemoteImageLoader: ObservableObject {
     @Published var state: RemoteImageState = .loading
-
+    
     private let url: URL
     private var cancellable: AnyCancellable?
-
+    
     init(url: URL) {
         self.url = url
         load()
     }
-
+    
     func load() {
         let request = URLRequest(url: url)
-
+        
         cancellable = URLSession.shared.dataTaskPublisher(for: request)
             .tryMap { result in
                 guard let image = UIImage(data: result.data) else {

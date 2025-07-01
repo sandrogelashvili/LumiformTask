@@ -11,7 +11,7 @@ struct CustomTextView: View {
     let text: String
     let style: TextStyle
     let color: Color
-
+    
     var body: some View {
         Text(text)
             .font(style.font)

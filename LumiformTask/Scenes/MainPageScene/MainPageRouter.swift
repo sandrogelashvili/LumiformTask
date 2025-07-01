@@ -16,8 +16,8 @@ class MainPageRouter {
     }
     
     func routeToSecondPage() {
-//        let router = SecondPageRouter(rootCoordinator: self.rootCoordinator)
-//        rootCoordinator.push(router)
+        let router = SecondPageRouter(rootCoordinator: self.rootCoordinator)
+        rootCoordinator.push(router)
     }
 }
 

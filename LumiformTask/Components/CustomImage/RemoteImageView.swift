@@ -8,48 +8,68 @@
 import SwiftUI
 
 struct RemoteImageView: View {
-    let url: URL
-    let size: CGSize?
-    let showFullscreen: Bool
-
+    
+    struct Attribute {
+        let text: String
+        let url: URL
+        let size: CGSize?
+        let showFullscreen: Bool
+        
+        init(
+            text: String,
+            url: URL,
+            size: CGSize? = nil,
+            showFullscreen: Bool = true
+        ) {
+            self.text = text
+            self.url = url
+            self.size = size
+            self.showFullscreen = showFullscreen
+        }
+    }
+    
+    let attributes: Attribute
     @StateObject private var loader: RemoteImageLoader
     @State private var isPresented = false
-
-    init(url: URL, size: CGSize? = nil, showFullscreen: Bool = true) {
-        self.url = url
-        self.size = size
-        self.showFullscreen = showFullscreen
-        _loader = StateObject(wrappedValue: RemoteImageLoader(url: url))
+    
+    init(attributes: Attribute) {
+        self.attributes = attributes
+        _loader = StateObject(wrappedValue: RemoteImageLoader(url: attributes.url))
     }
-
+    
     var body: some View {
         Group {
             switch loader.state {
             case .loading:
                 ProgressView()
-                    .frame(width: size?.width, height: size?.height)
-
+                    .frame(width: attributes.size?.width, height: attributes.size?.height)
+                
             case .failure:
                 Image(systemName: "photo")
                     .resizable()
                     .scaledToFit()
                     .foregroundColor(.gray)
-                    .frame(width: size?.width, height: size?.height)
-
+                    .frame(width: attributes.size?.width, height: attributes.size?.height)
+                
             case .success(let image):
                 image
                     .resizable()
                     .scaledToFit()
-                    .frame(width: size?.width, height: size?.height)
+                    .frame(width: attributes.size?.width, height: attributes.size?.height)
                     .onTapGesture {
-                        if showFullscreen {
+                        if attributes.showFullscreen {
                             isPresented = true
                         }
                     }
             }
         }
         .sheet(isPresented: $isPresented) {
-            FullscreenImageView(url: url)
+            FullscreenImageView(
+                attributes: .init(
+                    url: attributes.url,
+                    text: attributes.text
+                )
+            )
         }
     }
 }
