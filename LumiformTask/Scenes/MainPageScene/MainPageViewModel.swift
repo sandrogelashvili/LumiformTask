@@ -22,18 +22,12 @@ final class MainPageViewModel: ObservableObject {
     
     func fetchContent() async {
         do {
-            // Simulate artificial network delay (e.g. 3 seconds)
-            try await Task.sleep(nanoseconds: 3_000_000_000) // 3 seconds
-            
             let root = try await networkService.fetch(ContentItem.self, from: contentURL)
-            
             await MainActor.run {
                 self.mainPageContent = filterOutNestedPages(from: root)
             }
         } catch {
-            await MainActor.run {
-                self.errorMessage = error.localizedDescription
-            }
+            self.errorMessage = error.localizedDescription
         }
     }
     

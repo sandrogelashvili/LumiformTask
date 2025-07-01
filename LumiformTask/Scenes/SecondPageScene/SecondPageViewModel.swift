@@ -20,12 +20,13 @@ final class SecondPageViewModel: ObservableObject {
         self.router = router
     }
     
-    @MainActor
     func fetchSecondPage() async {
         do {
             let fullContent = try await networkService.fetch(ContentItem.self, from: contentURL)
             let nestedPage = findFirstNestedPage(excluding: fullContent)
-            self.secondPageContent = nestedPage
+            await MainActor.run {
+                self.secondPageContent = nestedPage
+            }
         } catch {
             self.errorMessage = error.localizedDescription
         }

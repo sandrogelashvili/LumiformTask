@@ -50,11 +50,14 @@ struct FullscreenImageView: View {
                     Button(action: {
                         dismiss()
                     }) {
-                        Image(systemName: "xmark")
-                            .foregroundColor(.primary)
-                            .padding(8)
-                            .background(Color.gray.opacity(0.2))
-                            .clipShape(Circle())
+                        LocalImageView(
+                            image: .closeXmark,
+                            size: CGSize(width: 20, height: 20),
+                            color: .defaultBlack
+                        )
+                        .padding(8)
+                        .background(Color.gray.opacity(0.2))
+                        .clipShape(Circle())
                     }
                 }
                 .padding()
