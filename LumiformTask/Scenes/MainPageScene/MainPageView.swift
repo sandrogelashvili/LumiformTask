@@ -22,10 +22,9 @@ struct MainPageView: View {
                             ContentListView(item: page, sectionLevel: 2)
                                 .padding()
                             
-                            Button("Go to nexxt page") {
-                                viewModel.navigateToSecondPage()
-                            }
+                            navigationButton
                         }
+                        .scrollIndicators(.hidden)
                         
                     } else if let error = viewModel.errorMessage {
                         Text("Error: \(error)")
@@ -41,5 +40,16 @@ struct MainPageView: View {
             }
             .navigationTitle(viewModel.mainPageContent?.title ?? "")
         }
+    }
+    
+    private var navigationButton: some View {
+        let attribute = PrimaryButton.Attribute(
+            image: .arrowLeft,
+            title: "Go to second page",
+            action: {
+                viewModel.navigateToSecondPage()
+            }
+        )
+        return PrimaryButton(attribute: attribute)
     }
 }
