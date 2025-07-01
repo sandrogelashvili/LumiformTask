@@ -9,7 +9,11 @@ import Foundation
 
 final class SecondPageViewModel: ObservableObject {
     @Published var secondPageContent: ContentItem?
-    @Published var errorMessage: String?
+    @Published var errorMessage: String? {
+        didSet { isShowingError = errorMessage != nil }
+    }
+    @Published var isShowingError: Bool = false
+    @Published var isLoading: Bool = false
     
     private let networkService: NetworkServiceProtocol
     private let router: SecondPageRouter
@@ -20,15 +24,22 @@ final class SecondPageViewModel: ObservableObject {
         self.router = router
     }
     
-    func fetchSecondPage() async {
-        do {
-            let fullContent = try await networkService.fetch(ContentItem.self, from: contentURL)
-            let nestedPage = findFirstNestedPage(excluding: fullContent)
-            await MainActor.run {
-                self.secondPageContent = nestedPage
+    func fetchSecondPage() {
+        Task {
+            await MainActor.run { self.isLoading = true }
+            do {
+                let fullContent = try await networkService.fetch(ContentItem.self, from: contentURL)
+                let nestedPage = findFirstNestedPage(excluding: fullContent)
+                await MainActor.run {
+                    self.secondPageContent = nestedPage
+                    self.isLoading = false
+                }
+            } catch {
+                await MainActor.run {
+                    self.errorMessage = error.localizedDescription
+                    self.isLoading = false
+                }
             }
-        } catch {
-            self.errorMessage = error.localizedDescription
         }
     }
     
