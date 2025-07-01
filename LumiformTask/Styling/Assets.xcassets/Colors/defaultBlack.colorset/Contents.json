@@ -16,7 +16,6 @@
       "appearances" : [
         {
           "appearance" : "luminosity",
-<<<<<<< HEAD
           "value" : "light"
         }
       ],
@@ -35,8 +34,7 @@
       "appearances" : [
         {
           "appearance" : "luminosity",
-=======
->>>>>>> parent of d553b2b (Revert "Feature/handle navigation")
+
           "value" : "dark"
         }
       ],
@@ -44,15 +42,9 @@
         "color-space" : "display-p3",
         "components" : {
           "alpha" : "1.000",
-<<<<<<< HEAD
           "blue" : "1.000",
           "green" : "1.000",
           "red" : "1.000"
-=======
-          "blue" : "0.000",
-          "green" : "0.000",
-          "red" : "0.000"
->>>>>>> parent of d553b2b (Revert "Feature/handle navigation")
         }
       },
       "idiom" : "universal"
