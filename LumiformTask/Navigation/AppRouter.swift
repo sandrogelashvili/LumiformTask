@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+@MainActor
 class AppRouter: ObservableObject {
     @Published var paths: NavigationPath
     
@@ -20,25 +21,17 @@ class AppRouter: ObservableObject {
     }
 }
 
-// MARK: NavigationCoordinator implementation
-
 extension AppRouter: NavigationCoordinator {
     func push(_ router: any Routable) {
-        DispatchQueue.main.async {
-            let wrappedRouter = AnyRoutable(router)
-            self.paths.append(wrappedRouter)
-        }
+        let wrappedRouter = AnyRoutable(router)
+        self.paths.append(wrappedRouter)
     }
-    
+
     func popLast() {
-        DispatchQueue.main.async {
-            self.paths.removeLast()
-        }
+        self.paths.removeLast()
     }
-    
+
     func popToRoot() {
-        DispatchQueue.main.async {
-            self.paths.removeLast(self.paths.count)
-        }
+        self.paths.removeLast(self.paths.count)
     }
 }

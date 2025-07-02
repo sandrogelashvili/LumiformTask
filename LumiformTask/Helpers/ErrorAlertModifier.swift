@@ -12,12 +12,12 @@ struct ErrorAlertModifier: ViewModifier {
     let message: String?
     
     func body(content: Content) -> some View {
-        content.alert("Error", isPresented: $isPresented) {
-            Button("OK", role: .cancel) {
+        content.alert(UIStrings.Alert.errorTitle, isPresented: $isPresented) {
+            Button(UIStrings.Button.ok, role: .cancel) {
                 isPresented = false
             }
         } message: {
-            Text(message ?? "Unknown error")
+            Text(message ?? UIStrings.Alert.unknownError)
         }
     }
 }

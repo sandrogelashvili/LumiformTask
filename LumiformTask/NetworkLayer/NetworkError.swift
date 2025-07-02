@@ -22,25 +22,25 @@ enum NetworkError: Error, LocalizedError {
     var errorDescription: String? {
         switch self {
         case .invalidURL:
-            return "Invalid URL."
-        case .requestFailed(let error):
-            return "Network request failed: \(error.localizedDescription)"
+            return "The requested address is incorrect"
+        case .requestFailed:
+            return "There was a problem connecting to the server"
         case .invalidResponse:
-            return "Invalid server response."
-        case .decodingFailed(let error):
-            return "Failed to decode response: \(error.localizedDescription)"
+            return "The server returned an invalid response"
+        case .decodingFailed:
+            return "We couldn't read the data properly"
         case .unauthorized:
-            return "Unauthorized (401)."
+            return "You're not authorized to access this content"
         case .forbidden:
-            return "Forbidden (403)."
+            return "You don't have permission to view this content"
         case .notFound:
-            return "Not found (404)."
+            return "The requested content was not found"
         case .timeout:
-            return "Request timeout (408)."
+            return "The request took too long. Please try again"
         case .serverError:
-            return "Server error (5xx)."
+            return "Something went wrong on our end. Please try again later"
         case .httpError(let code):
-            return "Unhandled HTTP error: \(code)."
+            return "Unexpected server response (code: \(code))"
         }
     }
 }

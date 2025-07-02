@@ -17,7 +17,7 @@ struct MainPageView: View {
             
             VStack {
                 if viewModel.isLoading {
-                    ProgressView("Loading...")
+                    ProgressView(UIStrings.Label.loading)
                     
                 } else if let page = viewModel.mainPageContent {
                     ScrollView {
@@ -32,7 +32,7 @@ struct MainPageView: View {
                     failedLoadingView
                 }
             }
-            .navigationTitle(viewModel.mainPageContent?.title ?? "")
+            .navigationTitle(viewModel.mainPageContent?.title ?? .empty)
             .errorAlert(isPresented: $viewModel.isShowingError, message: viewModel.errorMessage)
             .task {
                 viewModel.fetchContent()
@@ -42,8 +42,8 @@ struct MainPageView: View {
     
     private var navigationButton: some View {
         let attribute = PrimaryButton.Attribute(
-            image: .system("chevron.right"),
-            title: "Go to second page",
+            image: .system(UIStrings.SystemImage.chevronRight),
+            title: UIStrings.Button.secondPage,
             action: {
                 viewModel.navigateToSecondPage()
             }

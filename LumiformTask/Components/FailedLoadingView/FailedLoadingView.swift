@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct FailedLoadingView: View {
+    
     struct Attribute {
         let action: () -> Void
         
@@ -17,23 +18,27 @@ struct FailedLoadingView: View {
     }
     
     let attribute: Attribute
+    
     var body: some View {
-        VStack(spacing: 8) {
+        VStack(spacing: UIConstants.Spacing.s) {
             LocalImageView(
-                source: .system("wifi.slash"),
-                size: CGSize(width: 20, height: 20),
+                source: .system(UIStrings.SystemImage.wifiSlash),
+                size: CGSize(
+                    width: UIConstants.Size.l.width,
+                    height:  UIConstants.Size.l.height
+                ),
                 color: .defaultBlack
             )
             
             CustomTextView(
-                text: "No internet connection",
+                text: UIStrings.Label.noInternet,
                 style: .sectionTitle(level: 1),
                 color: .defaultBlack
             )
             
             PrimaryButton(
                 attribute: .init(
-                    title: "Retry",
+                    title: UIStrings.Button.retry,
                     action: attribute.action
                 )
             )
