@@ -13,7 +13,7 @@ protocol NetworkServiceProtocol {
 
 final class NetworkService: NetworkServiceProtocol {
     func fetch<T: Decodable>(_ type: T.Type, from url: URL) async throws -> T {
-        var request = URLRequest(url: url)
+        let request = URLRequest(url: url)
 //        request.cachePolicy = .reloadIgnoringLocalCacheData
         
         do {

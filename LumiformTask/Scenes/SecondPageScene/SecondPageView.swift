@@ -17,17 +17,21 @@ struct SecondPageView: View {
             
             VStack {
                 if viewModel.isLoading {
-                    ProgressView("Loading...")
+                    ProgressView(UIStrings.Label.loading)
                     
                 } else if let page = viewModel.secondPageContent {
-                    ContentListView(item: page, sectionLevel: 1)
-                        .padding()
+                    VStack {
+                        ContentListView(item: page, sectionLevel: 1)
+                            .padding()
+                        
+                        Spacer()
+                    }
                     
                 } else {
                     failedLoadingView
                 }
             }
-            .navigationTitle(viewModel.secondPageContent?.title ?? "")
+            .navigationTitle(viewModel.secondPageContent?.title ?? .empty)
             .errorAlert(isPresented: $viewModel.isShowingError, message: viewModel.errorMessage)
             .task {
                 viewModel.fetchSecondPage()

@@ -5,6 +5,13 @@
 //  Created by Aleksandre Gelashvili on 28.06.25.
 //
 
+//
+//  RemoteImageView.swift
+//  LumiformTask
+//
+//  Created by Aleksandre Gelashvili on 28.06.25.
+//
+
 import SwiftUI
 
 struct RemoteImageView: View {
@@ -38,38 +45,39 @@ struct RemoteImageView: View {
     }
     
     var body: some View {
-        Group {
-            switch loader.state {
-            case .loading:
-                ProgressView()
-                    .frame(width: attributes.size?.width, height: attributes.size?.height)
-                
-            case .failure:
-                Image(systemName: "photo")
-                    .resizable()
-                    .scaledToFit()
-                    .foregroundColor(.gray)
-                    .frame(width: attributes.size?.width, height: attributes.size?.height)
-                
-            case .success(let image):
-                image
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: attributes.size?.width, height: attributes.size?.height)
-                    .onTapGesture {
-                        if attributes.showFullscreen {
-                            isPresented = true
-                        }
-                    }
-            }
-        }
-        .sheet(isPresented: $isPresented) {
-            FullscreenImageView(
-                attributes: .init(
-                    url: attributes.url,
-                    text: attributes.text
+        imageView
+            .frame(width: attributes.size?.width, height: attributes.size?.height)
+            .sheet(isPresented: $isPresented) {
+                FullscreenImageView(
+                    attributes: .init(
+                        url: attributes.url,
+                        text: attributes.text
+                    )
                 )
-            )
+            }
+    }
+    
+    @ViewBuilder
+    private var imageView: some View {
+        switch loader.state {
+        case .loading:
+            ProgressView()
+            
+        case .failure:
+            Image(systemName: UIStrings.SystemImage.systemPhoto)
+                .resizable()
+                .scaledToFit()
+                .foregroundColor(.gray)
+            
+        case .success(let image):
+            image
+                .resizable()
+                .scaledToFit()
+                .onTapGesture {
+                    if attributes.showFullscreen {
+                        isPresented = true
+                    }
+                }
         }
     }
 }
