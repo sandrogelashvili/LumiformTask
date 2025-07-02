@@ -17,7 +17,6 @@ final class SecondPageViewModel: ObservableObject {
     
     private let networkService: NetworkServiceProtocol
     private let router: SecondPageRouter
-    private let contentURL = URL(string: "https://mocki.io/v1/f118b9f0-6f84-435e-85d5-faf4453eb72a")!
     
     init(networkService: NetworkServiceProtocol = NetworkService(), router: SecondPageRouter) {
         self.networkService = networkService
@@ -25,10 +24,15 @@ final class SecondPageViewModel: ObservableObject {
     }
     
     func fetchSecondPage() {
+        guard let url = URL(string: UIStrings.URL.contentURL) else {
+                errorMessage = "Invalid URL"
+                return
+            }
+        
         Task {
             await MainActor.run { self.isLoading = true }
             do {
-                let fullContent = try await networkService.fetch(ContentItem.self, from: contentURL)
+                let fullContent = try await networkService.fetch(ContentItem.self, from: url)
                 let nestedPage = findFirstNestedPage(excluding: fullContent)
                 await MainActor.run {
                     self.secondPageContent = nestedPage

@@ -37,21 +37,21 @@ struct PrimaryButton: View {
                 CustomTextView(
                     text: attribute.title,
                     style: .questionText,
-                    color: .white
+                    color: .defaultWhite
                 )
                 
                 if let image = attribute.image, let size = attribute.imageSize {
                     LocalImageView(
                         source: image,
                         size: size,
-                        color: .white
+                        color: .defaultWhite
                     )
                 }
             }
             .padding(.horizontal, UIConstants.Padding.xxl)
             .padding(.vertical, UIConstants.Padding.m)
         }
-        .background(.blue)
+        .background(.defaultBlack)
         .clipShape(RoundedRectangle(cornerRadius: UIConstants.CornerRadius.xl))
     }
 }

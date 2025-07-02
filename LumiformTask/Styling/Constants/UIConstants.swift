@@ -5,7 +5,7 @@
 //  Created by Aleksandre Gelashvili on 02.07.25.
 //
 
-import SwiftUI
+import Foundation
 
 enum UIConstants {
     

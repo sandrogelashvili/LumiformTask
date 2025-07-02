@@ -64,7 +64,7 @@ struct RemoteImageView: View {
             ProgressView()
             
         case .failure:
-            Image(systemName: "photo")
+            Image(systemName: UIStrings.SystemImage.systemPhoto)
                 .resizable()
                 .scaledToFit()
                 .foregroundColor(.gray)

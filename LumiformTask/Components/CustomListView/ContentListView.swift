@@ -58,7 +58,9 @@ struct ContentListView: View {
             
             if item.type == .section {
                 LocalImageView(
-                    source: .system(isExpanded ? "chevron.down" : "chevron.right"),
+                    source: .system(
+                        isExpanded ? UIStrings.SystemImage.chevronDown : UIStrings.SystemImage.chevronRight
+                    ),
                     size: CGSize(width: UIConstants.Size.s.width, height: UIConstants.Size.s.height),
                     color: .gray
                 )

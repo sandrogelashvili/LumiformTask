@@ -22,7 +22,7 @@ struct FailedLoadingView: View {
     var body: some View {
         VStack(spacing: UIConstants.Spacing.s) {
             LocalImageView(
-                source: .system("wifi.slash"),
+                source: .system(UIStrings.SystemImage.wifiSlash),
                 size: CGSize(
                     width: UIConstants.Size.l.width,
                     height:  UIConstants.Size.l.height
@@ -31,14 +31,14 @@ struct FailedLoadingView: View {
             )
             
             CustomTextView(
-                text: "No internet connection",
+                text: UIStrings.Label.noInternet,
                 style: .sectionTitle(level: 1),
                 color: .defaultBlack
             )
             
             PrimaryButton(
                 attribute: .init(
-                    title: "Retry",
+                    title: UIStrings.Button.retry,
                     action: attribute.action
                 )
             )

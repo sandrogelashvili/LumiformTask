@@ -17,7 +17,7 @@ struct SecondPageView: View {
             
             VStack {
                 if viewModel.isLoading {
-                    ProgressView("Loading...")
+                    ProgressView(UIStrings.Label.loading)
                     
                 } else if let page = viewModel.secondPageContent {
                     VStack {
@@ -31,7 +31,7 @@ struct SecondPageView: View {
                     failedLoadingView
                 }
             }
-            .navigationTitle(viewModel.secondPageContent?.title ?? "")
+            .navigationTitle(viewModel.secondPageContent?.title ?? .empty)
             .errorAlert(isPresented: $viewModel.isShowingError, message: viewModel.errorMessage)
             .task {
                 viewModel.fetchSecondPage()

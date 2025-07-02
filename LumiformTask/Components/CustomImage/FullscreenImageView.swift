@@ -34,6 +34,8 @@ struct FullscreenImageView: View {
                 
                 imageContent
                 
+                imageText
+                
                 Spacer()
             }
             .padding()
@@ -42,12 +44,6 @@ struct FullscreenImageView: View {
     
     private var header: some View {
         HStack {
-            CustomTextView(
-                text: attributes.text,
-                style: .sectionTitle(level: 2),
-                color: .defaultBlack
-            )
-            
             Spacer()
             
             Button(action: {
@@ -56,8 +52,8 @@ struct FullscreenImageView: View {
                 LocalImageView(
                     source: .asset(.closeXmark),
                     size: CGSize(
-                        width: UIConstants.Size.xl.width,
-                        height: UIConstants.Size.xl.height
+                        width: UIConstants.Size.m.width,
+                        height: UIConstants.Size.m.height
                     ),
                     color: .defaultBlack
                 )
@@ -77,7 +73,7 @@ struct FullscreenImageView: View {
             
         case .failure:
             LocalImageView(
-                source: .system("xmark.octagon"),
+                source: .system(UIStrings.SystemImage.xmarkOctagon),
                 size: CGSize(
                     width: UIConstants.Size.xl.width,
                     height: UIConstants.Size.xl.height
@@ -91,5 +87,14 @@ struct FullscreenImageView: View {
                 .scaledToFit()
                 .padding()
         }
+    }
+    
+    private var imageText: some View {
+        CustomTextView(
+            text: attributes.text,
+            style: .sectionTitle(level: 2),
+            color: .defaultBlack
+        )
+        .padding()
     }
 }
