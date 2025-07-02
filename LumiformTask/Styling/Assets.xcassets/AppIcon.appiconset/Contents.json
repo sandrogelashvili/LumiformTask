@@ -1,6 +1,7 @@
 {
   "images" : [
     {
+      "filename" : "8800C80D-D6FB-4844-A4E7-A2244558EA52 1.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
@@ -12,6 +13,7 @@
           "value" : "dark"
         }
       ],
+      "filename" : "2A9137D7-FDAA-4054-B6F9-D351177D7625.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
@@ -23,6 +25,7 @@
           "value" : "tinted"
         }
       ],
+      "filename" : "8800C80D-D6FB-4844-A4E7-A2244558EA52 2.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
