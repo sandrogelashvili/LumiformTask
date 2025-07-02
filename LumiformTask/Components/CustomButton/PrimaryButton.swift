@@ -48,7 +48,7 @@ struct PrimaryButton: View {
                 }
             }
             .padding(.horizontal, 28)
-            .padding(.vertical, 12.5)
+            .padding(.vertical, 12)
         }
         .background(.blue)
         .clipShape(RoundedRectangle(cornerRadius: 24))

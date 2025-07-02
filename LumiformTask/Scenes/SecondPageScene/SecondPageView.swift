@@ -20,8 +20,12 @@ struct SecondPageView: View {
                     ProgressView("Loading...")
                     
                 } else if let page = viewModel.secondPageContent {
-                    ContentListView(item: page, sectionLevel: 1)
-                        .padding()
+                    VStack {
+                        ContentListView(item: page, sectionLevel: 1)
+                            .padding()
+                        
+                        Spacer()
+                    }
                     
                 } else {
                     failedLoadingView

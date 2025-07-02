@@ -54,7 +54,7 @@ final class MainPageViewModel: ObservableObject {
         return newRoot
     }
     
-    func navigateToSecondPage() {
+    @MainActor func navigateToSecondPage() {
         router.routeToSecondPage()
     }
 }

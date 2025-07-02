@@ -11,13 +11,70 @@ struct ContentListView: View {
     let item: ContentItem
     let sectionLevel: Int
     
+    @State private var isExpanded: Bool
+    
     init(item: ContentItem, sectionLevel: Int = 1) {
         self.item = item
         self.sectionLevel = sectionLevel
+        self._isExpanded = State(initialValue: item.type != .section)
     }
     
     var body: some View {
+        Group {
+            if shouldWrapInGlass {
+                GlassContainer {
+                    contentBody
+                }
+            } else {
+                contentBody
+            }
+        }
+        .padding(.vertical, 8)
+    }
+    
+    private var contentBody: some View {
         VStack(alignment: .leading, spacing: 8) {
+            headerView
+            
+            if isExpanded {
+                if let children = item.items {
+                    ForEach(children.indices, id: \.self) { idx in
+                        ContentListView(
+                            item: children[idx],
+                            sectionLevel: item.type == .section ? sectionLevel + 1 : 1
+                        )
+                        .padding(.leading, 12)
+                    }
+                }
+            }
+        }
+    }
+    
+    private var headerView: some View {
+        HStack {
+            titleView
+            
+            Spacer()
+            
+            if item.type == .section {
+                LocalImageView(
+                    source: .system(isExpanded ? "chevron.down" : "chevron.right"),
+                    size: CGSize(width: 14, height: 14),
+                    color: .gray
+                )
+            }
+        }
+        .contentShape(Rectangle())
+        .onTapGesture {
+            guard item.type == .section else { return }
+            withAnimation {
+                isExpanded.toggle()
+            }
+        }
+    }
+    
+    private var titleView: some View {
+        Group {
             switch item.type {
             case .text, .section:
                 CustomTextView(
@@ -25,39 +82,24 @@ struct ContentListView: View {
                     style: .for(item: item, level: sectionLevel),
                     color: .defaultBlack
                 )
-                
             case .image:
                 if let src = item.src, let url = URL(string: src) {
                     RemoteImageView(
                         attributes: .init(
                             text: item.title,
                             url: url,
-                            size:  CGSize(width: 150, height: 150),
+                            size: CGSize(width: 150, height: 150),
                             showFullscreen: true
                         )
                     )
                 }
-                
-                CustomTextView(
-                    text: item.title,
-                    style: .for(item: item, level: sectionLevel),
-                    color: .defaultBlack
-                )
-                
             case .page:
                 EmptyView()
             }
-            
-            if let children = item.items {
-                ForEach(children.indices, id: \.self) { idx in
-                    ContentListView(
-                        item: children[idx],
-                        sectionLevel: item.type == .section ? sectionLevel + 1 : 1
-                    )
-                    .padding(.leading, 16)
-                }
-            }
         }
-        .padding(.vertical, 4)
+    }
+    
+    private var shouldWrapInGlass: Bool {
+        item.type == .section && sectionLevel == 1
     }
 }
