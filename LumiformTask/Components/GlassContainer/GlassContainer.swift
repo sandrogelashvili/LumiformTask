@@ -13,8 +13,8 @@ struct GlassContainer<Content: View>: View {
     let padding: CGFloat
 
     init(
-        cornerRadius: CGFloat = 16,
-        padding: CGFloat = 16,
+        cornerRadius: CGFloat = UIConstants.CornerRadius.l,
+        padding: CGFloat = UIConstants.Padding.l,
         @ViewBuilder content: () -> Content
     ) {
         self.content = content()
@@ -31,6 +31,6 @@ struct GlassContainer<Content: View>: View {
                     .fill(.ultraThinMaterial)
             )
             .padding(.horizontal, padding)
-            .padding(.vertical, 8)
+            .padding(.vertical, UIConstants.Padding.s)
     }
 }

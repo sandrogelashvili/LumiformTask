@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct FailedLoadingView: View {
+    
     struct Attribute {
         let action: () -> Void
         
@@ -17,11 +18,15 @@ struct FailedLoadingView: View {
     }
     
     let attribute: Attribute
+    
     var body: some View {
-        VStack(spacing: 8) {
+        VStack(spacing: UIConstants.Spacing.s) {
             LocalImageView(
                 source: .system("wifi.slash"),
-                size: CGSize(width: 20, height: 20),
+                size: CGSize(
+                    width: UIConstants.Size.l.width,
+                    height:  UIConstants.Size.l.height
+                ),
                 color: .defaultBlack
             )
             

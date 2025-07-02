@@ -29,11 +29,11 @@ struct ContentListView: View {
                 contentBody
             }
         }
-        .padding(.vertical, 8)
+        .padding(.vertical, UIConstants.Padding.s)
     }
     
     private var contentBody: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: UIConstants.Spacing.s) {
             headerView
             
             if isExpanded {
@@ -43,7 +43,7 @@ struct ContentListView: View {
                             item: children[idx],
                             sectionLevel: item.type == .section ? sectionLevel + 1 : 1
                         )
-                        .padding(.leading, 12)
+                        .padding(.leading, UIConstants.Padding.m)
                     }
                 }
             }
@@ -59,7 +59,7 @@ struct ContentListView: View {
             if item.type == .section {
                 LocalImageView(
                     source: .system(isExpanded ? "chevron.down" : "chevron.right"),
-                    size: CGSize(width: 14, height: 14),
+                    size: CGSize(width: UIConstants.Size.s.width, height: UIConstants.Size.s.height),
                     color: .gray
                 )
             }
@@ -88,7 +88,10 @@ struct ContentListView: View {
                         attributes: .init(
                             text: item.title,
                             url: url,
-                            size: CGSize(width: 150, height: 150),
+                            size: CGSize(
+                                width: UIConstants.Size.remoteImageSize.width,
+                                height: UIConstants.Size.remoteImageSize.height
+                            ),
                             showFullscreen: true
                         )
                     )
