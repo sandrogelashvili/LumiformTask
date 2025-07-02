@@ -18,6 +18,7 @@ enum UIStrings {
         static let errorTitle = "Error"
         static let genericError = "Something went wrong."
         static let unknownError = "Unknown error"
+        static let invalidURL = "Invalid URL"
     }
 
     enum Label {

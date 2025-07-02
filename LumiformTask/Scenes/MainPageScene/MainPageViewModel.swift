@@ -26,9 +26,9 @@ final class MainPageViewModel: ObservableObject {
     
     func fetchContent() {
         guard let url = URL(string: UIStrings.URL.contentURL) else {
-                errorMessage = "Invalid URL"
-                return
-            }
+            errorMessage = UIStrings.Alert.invalidURL
+            return
+        }
         
         Task {
             await MainActor.run {
