@@ -34,6 +34,16 @@ The app is structured following the MVVM pattern:
 
 The app leverages the built-in caching capabilities of `URLSession`. Once data is fetched, it is cached and available for offline use as long as the system retains it. Image requests also use the same mechanism.
 
+## Handling network failures
+
+To fully test how the app handles poor or failed network conditions, you may want to disable URLSession’s default caching behavior.
+In NetworkService, modify the cache policy of the URLRequest by replacing lines 16 and 17 with:
+<pre>
+var request = URLRequest(url: url)
+request.cachePolicy = .reloadIgnoringLocalCacheData
+</pre>
+
+
 ## Requirements
 
 - iOS 17 or later
