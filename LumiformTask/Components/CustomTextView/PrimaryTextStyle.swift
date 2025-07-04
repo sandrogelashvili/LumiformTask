@@ -31,7 +31,7 @@ enum TextStyle {
 }
 
 extension TextStyle {
-    static func `for`(item: ContentItem, level: Int) -> TextStyle {
+    static func `for`(item: ContentModel, level: Int) -> TextStyle {
         switch item.type {
         case .page:
             return .pageTitle

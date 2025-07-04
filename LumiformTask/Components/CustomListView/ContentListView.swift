@@ -8,12 +8,12 @@
 import SwiftUI
 
 struct ContentListView: View {
-    let item: ContentItem
+    let item: ContentModel
     let sectionLevel: Int
     
     @State private var isExpanded: Bool
     
-    init(item: ContentItem, sectionLevel: Int = 1) {
+    init(item: ContentModel, sectionLevel: Int = 1) {
         self.item = item
         self.sectionLevel = sectionLevel
         self._isExpanded = State(initialValue: item.type != .section)

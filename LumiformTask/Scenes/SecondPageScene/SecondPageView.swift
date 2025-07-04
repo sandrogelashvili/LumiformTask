@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SecondPageView: View {
-    @StateObject var viewModel: SecondPageViewModel
+    @State var viewModel: SecondPageViewModeling
     
     var body: some View {
         ZStack {
@@ -16,10 +16,10 @@ struct SecondPageView: View {
                 .ignoresSafeArea()
             
             VStack {
-                if viewModel.isLoading {
+                if viewModel.state.isLoading {
                     ProgressView(UIStrings.Label.loading)
                     
-                } else if let page = viewModel.secondPageContent {
+                } else if let page = viewModel.state.secondPageContent {
                     VStack {
                         ContentListView(item: page, sectionLevel: 1)
                             .padding()
@@ -31,10 +31,13 @@ struct SecondPageView: View {
                     failedLoadingView
                 }
             }
-            .navigationTitle(viewModel.secondPageContent?.title ?? .empty)
-            .errorAlert(isPresented: $viewModel.isShowingError, message: viewModel.errorMessage)
+            .navigationTitle(viewModel.state.secondPageContent?.title ?? .empty)
+            .errorAlert(
+                isPresented: $viewModel.state.isShowingError,
+                message: viewModel.state.errorMessage
+            )
             .task {
-                viewModel.fetchSecondPage()
+                viewModel.fetchContent()
             }
         }
         
@@ -43,7 +46,7 @@ struct SecondPageView: View {
     private var failedLoadingView: some View {
         let attribute = FailedLoadingView.Attribute(
             action: {
-                viewModel.fetchSecondPage()
+                viewModel.fetchContent()
             })
         return FailedLoadingView(attribute: attribute)
     }
