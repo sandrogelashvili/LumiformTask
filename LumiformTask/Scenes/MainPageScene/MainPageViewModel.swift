@@ -7,14 +7,8 @@
 
 import Foundation
 
-final class MainPageViewModel: ObservableObject {
-    @Published var mainPageContent: ContentItem?
-    @Published var errorMessage: String? {
-        didSet { isShowingError = errorMessage != nil }
-    }
-    @Published var isShowingError: Bool = false
-    @Published var isLoading: Bool = false
-    @Published var initialLoadCompleted: Bool = false
+final class MainPageViewModel: MainPageViewModeling {
+    var state: MainPageUIState = MainPageUIState()
     
     private let networkService: NetworkServiceProtocol
     private let router: MainPageRouter
@@ -26,32 +20,35 @@ final class MainPageViewModel: ObservableObject {
     
     func fetchContent() {
         guard let url = URL(string: UIStrings.URL.contentURL) else {
-            errorMessage = UIStrings.Alert.invalidURL
+            state.errorMessage = UIStrings.Alert.invalidURL
+            state.isShowingError = true
             return
         }
         
         Task {
             await MainActor.run {
-                self.isLoading = true
+                state.isLoading = true
             }
             do {
-                let root = try await networkService.fetch(ContentItem.self, from: url)
+                let root = try await networkService.fetch(ContentModel.self, from: url)
+                let filtered = filterOutNestedPages(from: root)
                 await MainActor.run {
-                    self.mainPageContent = filterOutNestedPages(from: root)
-                    self.isLoading = false
-                    self.initialLoadCompleted = true
+                    state.mainPageContent = filtered
+                    state.initialLoadCompleted = true
+                    state.isLoading = false
                 }
             } catch {
                 await MainActor.run {
-                    self.errorMessage = error.localizedDescription
-                    self.isLoading = false
-                    self.initialLoadCompleted = true
+                    state.errorMessage = error.localizedDescription
+                    state.isShowingError = true
+                    state.initialLoadCompleted = true
+                    state.isLoading = false
                 }
             }
         }
     }
     
-    private func filterOutNestedPages(from root: ContentItem) -> ContentItem {
+    private func filterOutNestedPages(from root: ContentModel) -> ContentModel {
         guard root.type == .page else { return root }
         var newRoot = root
         newRoot.items = root.items?.filter { $0.type != .page }
