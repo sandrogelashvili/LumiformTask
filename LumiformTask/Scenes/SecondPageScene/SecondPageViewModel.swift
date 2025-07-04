@@ -7,13 +7,8 @@
 
 import Foundation
 
-final class SecondPageViewModel: ObservableObject {
-    @Published var secondPageContent: ContentItem?
-    @Published var errorMessage: String? {
-        didSet { isShowingError = errorMessage != nil }
-    }
-    @Published var isShowingError: Bool = false
-    @Published var isLoading: Bool = false
+final class SecondPageViewModel: SecondPageViewModeling {
+    var state: SecondPageUIState = SecondPageUIState()
     
     private let networkService: NetworkServiceProtocol
     private let router: SecondPageRouter
@@ -23,31 +18,35 @@ final class SecondPageViewModel: ObservableObject {
         self.router = router
     }
     
-    func fetchSecondPage() {
+    func fetchContent() {
         guard let url = URL(string: UIStrings.URL.contentURL) else {
-            errorMessage = UIStrings.Alert.invalidURL
+            state.errorMessage = UIStrings.Alert.invalidURL
+            state.isShowingError = true
             return
         }
         
         Task {
-            await MainActor.run { self.isLoading = true }
+            await MainActor.run {
+                state.isLoading = true
+            }
             do {
-                let fullContent = try await networkService.fetch(ContentItem.self, from: url)
+                let fullContent = try await networkService.fetch(ContentModel.self, from: url)
                 let nestedPage = findFirstNestedPage(excluding: fullContent)
                 await MainActor.run {
-                    self.secondPageContent = nestedPage
-                    self.isLoading = false
+                    state.secondPageContent = nestedPage
+                    state.isLoading = false
                 }
             } catch {
                 await MainActor.run {
-                    self.errorMessage = error.localizedDescription
-                    self.isLoading = false
+                    state.errorMessage = error.localizedDescription
+                    state.isShowingError = true
+                    state.isLoading = false
                 }
             }
         }
     }
     
-    private func findFirstNestedPage(excluding root: ContentItem) -> ContentItem? {
+    private func findFirstNestedPage(excluding root: ContentModel) -> ContentModel? {
         guard let children = root.items else { return nil }
         
         for child in children {

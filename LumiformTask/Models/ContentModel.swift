@@ -7,10 +7,10 @@
 
 import Foundation
 
-struct ContentItem: Decodable {
+struct ContentModel: Decodable {
     let type: ItemType
     let title: String
-    var items: [ContentItem]?
+    var items: [ContentModel]?
     let src: String?
     
     enum ItemType: String, Decodable {
